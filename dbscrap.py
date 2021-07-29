@@ -2,10 +2,7 @@ import requests
 from bs4 import BeautifulSoup as BS
 import mysql.connector
 
-HOST = 'localhost'
-USER = 'root'
-PASSWORD = ''
-DATABASE = 'jdscrap'
+
 
 starturl = "https://www.justdial.com/"
 service = str(input("\n enter the service : "))
@@ -77,19 +74,36 @@ print(dictionary)
 # icon-lk = 8
 # icon-ji = 9ki
 # icon-acb = 0
-print("Done !!")
-x=0
-y=0
-listof=[["null"]*6]*10
+print("scrapped")
+
+HOST = str(input("enter host name : "))
+USER = str(input("enter user : "))
+PASSWORD = str(input("enter password : "))
+DATABASE = str(input("enter database name, if not exist create one : "))
+db1 = mysql.connector.connect(host=HOST, user=USER, passwd=PASSWORD)
+cursor = db1.cursor()
+sql = "CREATE DATABASE IF NOT EXISTS " + DATABASE
+cursor.execute(sql)
+x = 0
+y = 0
+listof = [["null"] * 6] * 10
 for x in range(len(dictionary)):
-    listof[x]=list(dictionary[x].values())
-print(listof)
+    listof[x] = list(dictionary[x].values())
 
 
 mydb = mysql.connector.connect(host=HOST, user=USER, passwd=PASSWORD, database=DATABASE)
 
 cursor = mydb.cursor()
-sql = "INSERT INTO scrap(compname,rating,address,contacts,city,service) VALUES (%s, %s, %s, %s, %s, %s) "
-cursor.executemany(sql,listof)
+table = str(input("enter table name, create if not exists "))
+sql = '''CREATE TABLE IF NOT EXISTS ''' + table + '''
+         (compname VARCHAR(30) NOT NULL,
+         rating FLOAT NOT NULL,
+         address VARCHAR(50) NOT NULL,
+         contacts BIGINT(13) NOT NULL,
+         city VARCHAR (20) NOT NULL,
+         service VARCHAR(30) NOT NULL)'''
+cursor.execute(sql)
+sql = "INSERT INTO " + table+" (compname,rating,address,contacts,city,service) VALUES (%s, %s, %s, %s, %s, %s) "
+cursor.executemany(sql, listof)
 mydb.commit()
 print("done")
