@@ -28,7 +28,7 @@ class School:
               " | date of birth(dob) : ", self.dob, " | contact : ", self.contact)
         cond = True
         while cond:
-            commd=input("enter what you want to edit, type done to confirm : ")
+            commd = input("enter what you want to edit, type done to confirm : ")
             if commd == "name":
                 self.name = input("enter student name : ")
             elif commd == "roll number":
@@ -40,13 +40,13 @@ class School:
             elif commd == "contact":
                 self.contact = int(input("enter contact number : "))
             elif commd == "done":
-                    cond = False
-            else :
+                cond = False
+            else:
                 print("please, enter valid command\n ")
         print("done !! check by viewing it \n")
 
-    def importcsv(self,dictemp):
-        x=len(dictemp)
+    def importcsv(self, dictemp):
+        x = len(dictemp)
         dictemp[x] = dict()
         dictemp[x]["rollno"] = self.rollno
         dictemp[x]["name"] = self.name
@@ -63,6 +63,7 @@ class School:
         return dictemp
 
 
+counter = 0
 condition = True
 students = []
 dictionary = dict()
@@ -78,7 +79,7 @@ print("list of commands : \n"
       "7. exit\n")
 command = ""
 while condition:
-    commnad=""
+    commnad = ""
     command = input("command : ")
     if command == "help":
         print("list of commands : \n"
@@ -93,13 +94,14 @@ while condition:
     if command == "enter record":
         print("enter student datails\n")
         students.append(School())
-        students[len(students)-1].inputdat()
+        students[len(students) - 1].inputdat()
 
     if command == "edit record":
         rollnum = input("enter roll number : ")
         for x in students:
             if x.rollno == rollnum:
                 x.editrec()
+                break
             else:
                 print("roll number not found")
 
@@ -109,6 +111,7 @@ while condition:
             if x.rollno == rollnum:
                 students.remove(x)
                 print("deleted !\n")
+                break
             else:
                 print("roll number not found")
 
@@ -121,9 +124,9 @@ while condition:
                 print("roll number not found")
 
     if command == "import to csv":
-        for x in students:
-            dictionary = x.importcsv(dictionary)
-
+        for x in range(0, len(students)):
+            dictionary = students[counter].importcsv(dictionary)
+    counter = len(students)
     if command == "exit":
         condition = False
 
